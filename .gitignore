@@ -59,4 +59,6 @@ sysinfo.txt
 *.unitypackage
 
 # Crashlytics generated file
-crashlytics-build.properties
+crashlytics-build.properties.git/objects/pack/pack-f8cd149ba374dc368ec52d86a696732f5608e948.pack
+RugbySimulator/Build/RugbySimulator/bin/x86/Debug/AppX/UnityPlayer.dll
+RugbySimulator/Build/RugbySimulator/bin/x86/Debug/UnityPlayer.dll

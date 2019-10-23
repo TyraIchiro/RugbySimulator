@@ -1,8 +1,8 @@
 WindowsStoreApps
 PlayerPath?
-C:/Users/Owner/Documents/Unity/RugbySimulator
+D:/Unity/RugbySimulator/RugbySimulator/Build
 SceneListBegin?
-Assets/MixedRealityToolkit.Examples/Demos/HandTracking/Scenes/HandInteractionExamples.unity
+Assets/Scenes/SampleScene.unity
 SceneListEnd?
 2a96dc89b8a5059865d5c28557c5ab8d Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.Input.ScreenSpaceMousePointer
 c4a2ae8d92316554f46813565a38c329 Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.UI.SpeechConfirmationTooltip
@@ -421,6 +421,7 @@ e63944317d2f5958e31963668bb29158 Assembly-CSharp.dll:TMPro.Examples.VertexShakeB
 952dbaa980d059b2ea218cb83fdd4af1 Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.DemoTouchButton
 d196a77c95392e43985bd5fca4840f86 Microsoft.MixedReality.Toolkit.dll:Microsoft.MixedReality.Toolkit.Input.HandBounds
 9f954fa6cbac53b0372fb4d2f6779daf Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.Input.PointerHandler
+1dea871cc9467c2382b8879fafa0ed05 Assembly-CSharp.dll:.Line
 be4d0da5c0901314e439aa05651c4119 Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.UI.ToggleHandVisualisation
 5bb0c23ac2810973880e592724a69354 Assembly-CSharp.dll:TMPro.Examples.Benchmark02
 a1dd2398b00749109bee3b1a27ad07b3 Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.EyeTracking.BlendOut
