@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+/*
 public class Receiver : MonoBehaviour, IMixedRealitySourceStateHandler, IMixedRealityInputHandler
 {
     IMixedRealityInputSource currentInputSource;
@@ -78,4 +78,4 @@ public class Receiver : MonoBehaviour, IMixedRealitySourceStateHandler, IMixedRe
         }
         cubes.Clear();
     }
-}
+}*/
