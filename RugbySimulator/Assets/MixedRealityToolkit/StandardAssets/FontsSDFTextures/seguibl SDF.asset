@@ -1827,6 +1827,7 @@ MonoBehaviour:
   m_AtlasTextures:
   - {fileID: 28325627366346640}
   m_AtlasTextureIndex: 0
+  m_IsMultiAtlasTexturesEnabled: 0
   m_UsedGlyphRects: []
   m_FreeGlyphRects: []
   m_fontInfo:

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,27 +16,6 @@ using UnityEngine;
 namespace Microsoft.MixedReality.Toolkit.MSBuild
 {
     /// <summary>
-    /// Represents where a Unity project reference asset is located.
-    /// </summary>
-    public enum AssetLocation
-    {
-        /// <summary>
-        /// Inside the Assets folder of the Unity project.
-        /// </summary>
-        Project,
-
-        /// <summary>
-        /// Inside the Packages folder of the Unity project.
-        /// </summary>
-        Package,
-
-        /// <summary>
-        /// Inside the Packages folder shipped with the Unity version.
-        /// </summary>
-        BuiltInPackage
-    }
-
-    /// <summary>
     /// Helper Utilities methods used by other classes.
     /// </summary>
     public static class Utilities
@@ -43,26 +23,15 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
         private const string AssetsFolderName = "Assets";
         private const string PackagesFolderName = "Packages";
         private const string MSBuildFolderName = "MSBuild";
+
+        public static readonly string MSBuildOutputFolder = GetNormalizedPath(Application.dataPath.Replace("Assets", MSBuildFolderName), true);
         public const string PackagesCopyFolderName = "PackagesCopy";
 
-        private const string BuiltInPackagesRelativePath = @"Data\Resources\PackageManager\BuiltInPackages";
-
-        public static string ProjectPath { get; } = Application.dataPath.Substring(0, Application.dataPath.Length - AssetsFolderName.Length);
-        public static string MSBuildOutputFolder { get; } = GetNormalizedPath(ProjectPath + MSBuildFolderName, true);
-        public static string PackagesCopyPath { get; } = Path.Combine(MSBuildOutputFolder, PackagesCopyFolderName);
-        public const string MetaFileGuidRegex = @"guid:\s*([0-9a-fA-F]{32})";
-
-        private static readonly string packagesPath;
-
-        public static string AssetPath { get; }
-
-        public static string BuiltInPackagesPath { get; }
+        private static readonly string assetsPath;
 
         static Utilities()
         {
-            AssetPath = Path.GetFullPath(Application.dataPath);
-            packagesPath = Path.GetFullPath(ProjectPath + PackagesFolderName);
-            BuiltInPackagesPath = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(EditorApplication.applicationPath), BuiltInPackagesRelativePath));
+            assetsPath = Path.GetFullPath(Application.dataPath);
         }
 
         /// <summary>
@@ -72,7 +41,7 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
         {
             if (assetsRelativePath.StartsWith(AssetsFolderName))
             {
-                return Path.GetFullPath(AssetPath + assetsRelativePath.Substring(AssetsFolderName.Length));
+                return Path.GetFullPath(assetsRelativePath.Replace(AssetsFolderName, assetsPath));
             }
 
             throw new InvalidOperationException("Not a path known to be relative to the project's Asset folder.");
@@ -85,78 +54,10 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
         {
             if (path.StartsWith(PackagesFolderName))
             {
-                return Path.GetFullPath(Path.Combine(MSBuildOutputFolder, PackagesCopyFolderName + path.Substring(PackagesFolderName.Length)));
+                return Path.GetFullPath(Path.Combine(MSBuildOutputFolder, path.Replace(PackagesFolderName, PackagesCopyFolderName)));
             }
 
             throw new InvalidOperationException("Not a path known to be relative to project's Package folder.");
-        }
-
-        /// <summary>
-        /// Parses a .meta file to extract a guid for the asset.
-        /// </summary>
-        /// <param name="assetPath">The path to the asset (not the .meta file).</param>
-        /// <param name="guid">The guid extracted.</param>
-        /// <returns>True if the operation was successful.</returns>
-        public static bool TryGetGuidForAsset(FileInfo assetPath, out Guid guid)
-        {
-            string metaFile = $"{assetPath.FullName}.meta";
-
-            if (!File.Exists(metaFile))
-            {
-                guid = default;
-                return false;
-            }
-
-            string guidString = null;
-            using (StreamReader reader = new StreamReader(metaFile))
-            {
-                while (!reader.EndOfStream)
-                {
-                    string line = reader.ReadLine();
-                    Match match = Regex.Match(line, Utilities.MetaFileGuidRegex);
-
-                    if (match.Success)
-                    {
-                        guidString = match.Groups[1].Captures[0].Value;
-                        break;
-                    }
-                }
-            }
-
-            if (guid != null && Guid.TryParse(guidString, out guid))
-            {
-                return true;
-            }
-
-            guid = default;
-            return false;
-        }
-
-        /// <summary>
-        /// Gets the known <see cref="AssetLocation"/> for the asset file.
-        /// </summary>
-        /// <param name="assetFile">The asset file.</param>
-        /// <returns>The <see cref="AssetLocation"/> if valid; throws an exception otherwise.</returns>
-        public static AssetLocation GetAssetLocation(FileInfo assetFile)
-        {
-            string absolutePath = Path.GetFullPath(assetFile.FullName);
-
-            if (absolutePath.Contains(AssetPath))
-            {
-                return AssetLocation.Project;
-            }
-            else if (absolutePath.Contains(packagesPath) || absolutePath.Contains(PackagesCopyPath))
-            {
-                return AssetLocation.Package;
-            }
-            else if (absolutePath.Contains(BuiltInPackagesPath))
-            {
-                return AssetLocation.BuiltInPackage;
-            }
-            else
-            {
-                throw new InvalidDataException($"Unknown asset location for '{absolutePath}'");
-            }
         }
 
         /// <summary>
@@ -183,31 +84,12 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
         {
             absolutePath = Path.GetFullPath(absolutePath);
 
-            if (absolutePath.Contains(AssetPath))
+            if (!absolutePath.Contains(assetsPath))
             {
-                return absolutePath.Replace(AssetPath, AssetsFolderName);
+                throw new ArgumentException(nameof(absolutePath), $"Absolute path '{absolutePath}' is not a Unity Assets relative path ('{assetsPath}')");
             }
 
-            throw new ArgumentException(nameof(absolutePath), $"Absolute path '{absolutePath}' is not a Unity Assets relative path ('{AssetPath}')");
-        }
-
-        /// <summary>
-        /// Get a path relative to the Packages folder from the absolute path, uses PackagesOutput folder.
-        /// </summary>
-        public static string GetPackagesRelativePathFrom(string absolutePath)
-        {
-            absolutePath = Path.GetFullPath(absolutePath);
-
-            if (absolutePath.Contains(packagesPath))
-            {
-                return absolutePath.Replace(packagesPath, PackagesCopyFolderName);
-            }
-            else if (absolutePath.Contains(PackagesCopyPath))
-            {
-                return absolutePath.Replace(PackagesCopyPath, PackagesCopyFolderName);
-            }
-
-            throw new ArgumentException(nameof(absolutePath), $"Absolute path '{absolutePath}' is not a Unity Project Packages relative path ('{packagesPath}')");
+            return absolutePath.Replace(assetsPath, AssetsFolderName);
         }
 
         /// <summary>
@@ -218,12 +100,7 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
             thisAbsolute = Path.GetFullPath(thisAbsolute);
             thatAbsolute = Path.GetFullPath(thatAbsolute);
 
-            if (!thisAbsolute.EndsWith("\\"))
-            {
-                thisAbsolute = thisAbsolute + "\\";
-            }
-
-            return GetNormalizedPath(new Uri(thisAbsolute).MakeRelativeUri(new Uri(thatAbsolute)).OriginalString);
+            return new Uri(thisAbsolute).MakeRelativeUri(new Uri(thatAbsolute)).OriginalString;
         }
 
         /// <summary>
@@ -237,7 +114,7 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
         /// <summary>
         /// Reads until some contents is encountered, or the end of the stream is reached.
         /// </summary>
-        /// <param name="reader">The <see cref="System.IO.StreamReader"/> to use for reading.</param>
+        /// <param name="reader">The <see cref="StreamReader"/> to use for reading.</param>
         /// <param name="contents">The contents to search for in the lines being read.</param>
         /// <returns>The line on which some of the contents was found.</returns>
         public static string ReadUntil(this StreamReader reader, params string[] contents)
@@ -316,9 +193,9 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
         }
 
         /// <summary>
-        /// Reads while the predicate is satisfied, returns the line on which it failed.
+        /// Reads while the predicate is satisifed, returns the line on which it failed.
         /// </summary>
-        /// <param name="reader">The <see cref="System.IO.StreamReader"/> to use for reading.</param>
+        /// <param name="reader">The <see cref="StreamReader"/> to use for reading.</param>
         /// <param name="predicate">The predicate that should return false when reading should stop.</param>
         /// <returns>The line on which the predicate returned false.</returns>
         public static string ReadWhile(this StreamReader reader, System.Func<string, bool> predicate)
@@ -384,7 +261,7 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
         /// <summary>
         /// Helper to perform an IO operation with retries.
         /// </summary>
-        public static bool TryIOWithRetries(Action operation, int numRetries, TimeSpan sleepBetweenRetries, bool throwOnLastRetry = false)
+        public static bool TryIOWithRetries(Action operation, int numRetries, TimeSpan sleepBetweenRetrie, bool throwOnLastRetry = false)
         {
             do
             {
@@ -408,7 +285,7 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
                     }
                 }
 
-                Thread.Sleep(sleepBetweenRetries);
+                Thread.Sleep(sleepBetweenRetrie);
                 numRetries--;
             } while (numRetries >= 0);
 
@@ -416,7 +293,7 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
         }
 
         /// <summary>
-        /// Delete directory helper that also waits for delete to completely propagate through the system.
+        /// Delete directory helper that also waits for delete to completely propogate through the system.
         /// </summary>
         public static void DeleteDirectory(string targetDir, bool waitForDirectoryDelete = false)
         {
@@ -438,14 +315,15 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
 
             TryIOWithRetries(() => Directory.Delete(targetDir, false), 2, TimeSpan.FromMilliseconds(100), true);
 
-            if (waitForDirectoryDelete && Application.isEditor)
+            if (waitForDirectoryDelete)
             {
-                // Just in case make sure this is forced to be Editor only
+#if UNITY_EDITOR // Just in case make sure this is forced to be Editor only
                 // Sometimes the delete isn't committed fast enough, lets spin and wait for this to happen
                 for (int i = 0; i < 10 && Directory.Exists(targetDir); i++)
                 {
                     Thread.Sleep(100);
                 }
+#endif
             }
         }
 
@@ -512,8 +390,8 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
 
             if (result.Success)
             {
-                fullTemplate = result.Groups[0].Captures[0].Value.TrimEnd();
-                templateBody = result.Groups[1].Captures[0].Value.TrimEnd();
+                fullTemplate = result.Groups[0].Captures[0].Value;
+                templateBody = result.Groups[1].Captures[0].Value;
                 return true;
             }
 
@@ -555,7 +433,7 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
         }
 
         /// <summary>
-        /// Gets a <see href="https://docs.unity3d.com/ScriptReference/BuildTargetGroup.html">BuildTargetGroup</see> for a specified <see href="https://docs.unity3d.com/ScriptReference/BuildTarget.html">BuildTarget</see>.
+        /// Gets a <see cref="BuildTargetGroup"/> for a specified <see cref="BuildTarget"/>.
         /// </summary>
         public static BuildTargetGroup GetBuildTargetGroup(BuildTarget buildTarget)
         {
@@ -593,3 +471,4 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
         }
     }
 }
+#endif

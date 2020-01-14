@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Text;
 using UnityEditor;
 using UnityEditor.Compilation;
+using UnityEditorInternal;
 using UnityEngine;
 
 namespace Microsoft.MixedReality.Toolkit.MSBuild
@@ -18,43 +20,53 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
     /// </summary>
     public class UnityProjectInfo
     {
-        /// <summary>
-        /// These package references aren't actual packages it appears, manually labeling them for exclusion.
-        /// </summary>
-        private static readonly HashSet<string> ExcludedPackageReferences = new HashSet<string>()
-        {
-            "Windows.UI.Input.Spatial"
-        };
+        private IEnumerable<CompilationPlatformInfo> availablePlatforms;
 
-        /// <summary>
-        /// Gets the name of this Unity Project.
-        /// </summary>
-        public string UnityProjectName { get; }
-
-        /// <summary>
-        /// Gets the available platforms for this Unity project.
-        /// </summary>
-        internal IEnumerable<CompilationPlatformInfo> AvailablePlatforms { get; }
-
-        /// <summary>
-        /// Gets all the parsed CSProjects for this Unity project.
-        /// </summary>
         public IReadOnlyDictionary<string, CSProjectInfo> CSProjects { get; }
 
-        /// <summary>
-        /// Gets all the parsed DLLs for this Unity project.
-        /// </summary>
         public IReadOnlyCollection<PluginAssemblyInfo> Plugins { get; }
 
         public UnityProjectInfo(IEnumerable<CompilationPlatformInfo> availablePlatforms, string projectOutputPath)
         {
-            AvailablePlatforms = availablePlatforms;
+            this.availablePlatforms = availablePlatforms;
 
-            UnityProjectName = Application.productName;
+            Dictionary<string, Assembly> unityAssemblies = CompilationPipeline.GetAssemblies().ToDictionary(t => t.name);
 
-            if (string.IsNullOrWhiteSpace(UnityProjectName))
+            Dictionary<string, CSProjectInfo> csProjects = new Dictionary<string, CSProjectInfo>();
+            CSProjects = new ReadOnlyDictionary<string, CSProjectInfo>(csProjects);
+
+            foreach (KeyValuePair<string, Assembly> pair in unityAssemblies)
             {
-                UnityProjectName = "UnityProject";
+                CSProjectInfo toAdd;
+                string asmDefPath = CompilationPipeline.GetAssemblyDefinitionFilePathFromAssemblyName(pair.Key);
+                if (string.IsNullOrEmpty(asmDefPath))
+                {
+                    if (!pair.Key.StartsWith("Assembly-CSharp"))
+                    {
+                        Debug.LogError($"Failed to retrieve AsmDef for script assembly: {pair.Key}");
+                    }
+
+                    toAdd = new CSProjectInfo(availablePlatforms, Guid.NewGuid(), null, pair.Value, projectOutputPath);
+                }
+                else
+                {
+                    string guid = AssetDatabase.AssetPathToGUID(asmDefPath);
+                    if (!Guid.TryParse(guid, out Guid guidResult))
+                    {
+                        Debug.LogError($"Failed to get GUID of the AsmDef at '{asmDefPath}' for assembly: {pair.Key}");
+                    }
+                    else
+                    {
+                        guidResult = Guid.NewGuid();
+                    }
+
+                    AssemblyDefinitionAsset assemblyDefinitionAsset = AssetDatabase.LoadAssetAtPath<AssemblyDefinitionAsset>(asmDefPath);
+                    AssemblyDefinitionInfo assemblyDefinitionInfo = assemblyDefinitionAsset == null ? null : JsonUtility.FromJson<AssemblyDefinitionInfo>(assemblyDefinitionAsset.text);
+                    assemblyDefinitionInfo?.Validate(availablePlatforms);
+                    toAdd = new CSProjectInfo(availablePlatforms, guidResult, assemblyDefinitionInfo, pair.Value, projectOutputPath);
+                }
+
+                csProjects.Add(pair.Key, toAdd);
             }
 
             Plugins = new ReadOnlyCollection<PluginAssemblyInfo>(ScanForPluginDLLs());
@@ -63,144 +75,52 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
             {
                 if (plugin.Type == PluginType.Native)
                 {
-                    Debug.Log($"Native plugin {plugin.ReferencePath.AbsolutePath} not yet supported for MSBuild project.");
+                    Debug.LogWarning($"Native plugin {plugin.ReferencePath.AbsolutePath} not yet supported for MSBuild project.");
                 }
             }
 
-            CSProjects = new ReadOnlyDictionary<string, CSProjectInfo>(CreateUnityProjects(projectOutputPath));
-        }
-
-        private Dictionary<string, CSProjectInfo> CreateUnityProjects(string projectOutputPath)
-        {
-            // Not all of these will be converted to C# objects, only the ones found to be referenced
-            Dictionary<string, AssemblyDefinitionInfo> asmDefInfoMap = new Dictionary<string, AssemblyDefinitionInfo>();
-            HashSet<string> builtInPackagesWithoutSource = new HashSet<string>();
-
-            // Parse the builtInPackagesFirst
-            DirectoryInfo builtInPackagesDirectory = new DirectoryInfo(Utilities.BuiltInPackagesPath);
-            foreach (DirectoryInfo packageDirectory in builtInPackagesDirectory.GetDirectories())
+            foreach (CSProjectInfo project in CSProjects.Values)
             {
-                FileInfo[] asmDefFiles = packageDirectory.GetFiles("*.asmdef", SearchOption.AllDirectories);
+                // Get the assembly references first from AssemblyDefinitionInfo if available (it's actually more correct), otherwise fallback to Assemby
+                IEnumerable<string> references = project.AssemblyDefinitionInfo == null
+                    ? project.Assembly.assemblyReferences.Select(t => t.name)
+                    : (project.AssemblyDefinitionInfo.references ?? Array.Empty<string>());
 
-                if (asmDefFiles.Length == 0)
+                foreach (string reference in references)
                 {
-                    builtInPackagesWithoutSource.Add(packageDirectory.Name.ToLower());
-                    continue;
-                }
-
-                foreach (FileInfo fileInfo in asmDefFiles)
-                {
-                    AssemblyDefinitionInfo assemblyDefinitionInfo = AssemblyDefinitionInfo.Parse(fileInfo, this, null, true);
-                    asmDefInfoMap.Add(Path.GetFileNameWithoutExtension(fileInfo.Name), assemblyDefinitionInfo);
-                }
-            }
-
-            Dictionary<string, Assembly> unityAssemblies = CompilationPipeline.GetAssemblies().ToDictionary(t => t.name);
-            Dictionary<string, CSProjectInfo> projectsMap = new Dictionary<string, CSProjectInfo>();
-            Queue<string> projectsToProcess = new Queue<string>();
-            // Parse the unity assemblies
-            foreach (KeyValuePair<string, Assembly> pair in unityAssemblies)
-            {
-                if (!asmDefInfoMap.TryGetValue(pair.Key, out AssemblyDefinitionInfo assemblyDefinitionInfo))
-                {
-                    string asmDefPath = CompilationPipeline.GetAssemblyDefinitionFilePathFromAssemblyName(pair.Key);
-                    if (string.IsNullOrEmpty(asmDefPath))
+                    if (CSProjects.TryGetValue(reference, out CSProjectInfo dependency))
                     {
-                        if (!pair.Key.StartsWith("Assembly-CSharp"))
-                        {
-                            throw new InvalidOperationException($"Failed to retrieve AsmDef for script assembly: {pair.Key}");
-                        }
-
-                        assemblyDefinitionInfo = AssemblyDefinitionInfo.GetDefaultAssemblyCSharpInfo(pair.Value);
-                        projectsToProcess.Enqueue(pair.Key);
+                        project.AddDependency(dependency);
                     }
                     else
                     {
-                        assemblyDefinitionInfo = AssemblyDefinitionInfo.Parse(new FileInfo(Utilities.GetFullPathFromKnownRelative(asmDefPath)), this, pair.Value);
-
-                        if (asmDefPath.StartsWith("Assets/"))
-                        {
-                            // Add as mandatory
-                            projectsToProcess.Enqueue(pair.Key);
-                        }
+                        Debug.LogError($"Failed to get dependency '{reference}' for project '{project.Name}'.");
                     }
-
-                    asmDefInfoMap.Add(pair.Key, assemblyDefinitionInfo);
                 }
-            }
 
-            while (projectsToProcess.Count > 0)
-            {
-                string projectKey = projectsToProcess.Dequeue();
-
-                if (!projectsMap.ContainsKey(projectKey))
+                foreach (PluginAssemblyInfo plugin in Plugins)
                 {
-                    GetProjectInfo(projectsMap, asmDefInfoMap, builtInPackagesWithoutSource, projectKey, projectOutputPath);
-                }
-            }
-
-            return projectsMap;
-        }
-
-        private CSProjectInfo GetProjectInfo(Dictionary<string, CSProjectInfo> projectsMap, Dictionary<string, AssemblyDefinitionInfo> asmDefInfoMap, HashSet<string> builtInPackagesWithoutSource, string projectKey, string projectOutputPath)
-        {
-            if (projectsMap.TryGetValue(projectKey, out CSProjectInfo value))
-            {
-                return value;
-            }
-
-            if (!asmDefInfoMap.TryGetValue(projectKey, out AssemblyDefinitionInfo assemblyDefinitionInfo))
-            {
-                throw new InvalidOperationException($"Can't find an asmdef for project: {projectKey}");
-            }
-
-            CSProjectInfo toReturn = new CSProjectInfo(this, assemblyDefinitionInfo, projectOutputPath);
-            projectsMap.Add(projectKey, toReturn);
-
-            if (!assemblyDefinitionInfo.BuiltInPackage)
-            {
-                foreach (PluginAssemblyInfo plugin in Plugins.Where(t => t.Type != PluginType.Native))
-                {
-                    if (plugin.AutoReferenced || assemblyDefinitionInfo.PrecompiledAssemblyReferences.Contains(plugin.Name))
+                    if (plugin.AutoReferenced && plugin.Type != PluginType.Native)
                     {
-                        toReturn.AddDependency(plugin);
+                        project.AddDependency(plugin);
                     }
                 }
             }
-
-            foreach (string reference in toReturn.AssemblyDefinitionInfo.References)
-            {
-                if (ExcludedPackageReferences.Contains(reference))
-                {
-                    Debug.LogWarning($"Skipping processing {reference} for {toReturn.Name}, as it's marked as excluded.");
-                    continue;
-                }
-                string packageCandidate = $"com.{reference.ToLower()}";
-                if (builtInPackagesWithoutSource.Any(t => packageCandidate.StartsWith(t)))
-                {
-                    Debug.LogWarning($"Skipping processing {reference} for {toReturn.Name}, as it's a built-in package without source.");
-                    continue;
-                }
-
-                toReturn.AddDependency(GetProjectInfo(projectsMap, asmDefInfoMap, builtInPackagesWithoutSource, reference, projectOutputPath));
-            }
-
-            return toReturn;
         }
 
         private List<PluginAssemblyInfo> ScanForPluginDLLs()
         {
             List<PluginAssemblyInfo> toReturn = new List<PluginAssemblyInfo>();
 
-            foreach (string assetAssemblyPath in Directory.GetFiles(Utilities.AssetPath, "*.dll", SearchOption.AllDirectories))
+            foreach (string assetAssemblyPath in Directory.GetFiles(Application.dataPath, "*.dll", SearchOption.AllDirectories))
             {
                 string assetRelativePath = Utilities.GetAssetsRelativePathFrom(assetAssemblyPath);
                 PluginImporter importer = (PluginImporter)AssetImporter.GetAtPath(assetRelativePath);
-                PluginAssemblyInfo toAdd = new PluginAssemblyInfo(this, Guid.Parse(AssetDatabase.AssetPathToGUID(assetRelativePath)), assetAssemblyPath, importer.isNativePlugin ? PluginType.Native : PluginType.Managed);
+                PluginAssemblyInfo toAdd = new PluginAssemblyInfo(availablePlatforms, Guid.Parse(AssetDatabase.AssetPathToGUID(assetRelativePath)), assetAssemblyPath, importer.isNativePlugin ? PluginType.Native : PluginType.Managed);
                 toReturn.Add(toAdd);
             }
 
-            foreach (string packageDllPath in Directory.GetFiles(Utilities.PackagesCopyPath, "*.dll", SearchOption.AllDirectories))
+            foreach (string packageDllPath in Directory.GetFiles(Utilities.GetFullPathFromPackagesRelative("Packages"), "*.dll", SearchOption.AllDirectories))
             {
                 string metaPath = packageDllPath + ".meta";
 
@@ -221,7 +141,7 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
                 }
 
                 bool isManaged = Utilities.IsManagedAssembly(packageDllPath);
-                PluginAssemblyInfo toAdd = new PluginAssemblyInfo(this, guid, packageDllPath, isManaged ? PluginType.Managed : PluginType.Native);
+                PluginAssemblyInfo toAdd = new PluginAssemblyInfo(availablePlatforms, guid, packageDllPath, isManaged ? PluginType.Managed : PluginType.Native);
                 toReturn.Add(toAdd);
             }
 
@@ -230,11 +150,11 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
 
         private string GetProjectEntry(CSProjectInfo projectInfo, string projectEntryTemplateBody)
         {
-            StringBuilder toReturn = new StringBuilder();
-            toReturn.AppendLine(Utilities.ReplaceTokens(projectEntryTemplateBody, new Dictionary<string, string>() {
+            StringBuilder toReturn = new StringBuilder(Utilities.ReplaceTokens(projectEntryTemplateBody, new Dictionary<string, string>() {
                         { "<PROJECT_NAME>", projectInfo.Name },
                         { "<PROJECT_RELATIVE_PATH>", Path.GetFileName(projectInfo.ReferencePath.AbsolutePath) },
                         { "<PROJECT_GUID>", projectInfo.Guid.ToString().ToUpper() } }));
+
             if (projectInfo.ProjectDependencies.Count > 0)
             {
                 string projectDependencyStartSection = "    ProjectSection(ProjectDependencies) = postProject";
@@ -261,7 +181,7 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
         /// <param name="generatedProjectPath">The output folder of the platform props.</param>
         public void ExportSolution(string solutionTemplateText, string projectFileTemplateText, string generatedProjectPath)
         {
-            string solutionFilePath = Path.Combine(generatedProjectPath, $"{UnityProjectName}.sln");
+            string solutionFilePath = Path.Combine(generatedProjectPath, "MRTK.sln");
 
             if (File.Exists(solutionFilePath))
             {
@@ -302,6 +222,8 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
                     }
                 }
 
+                File.WriteAllLines(Path.Combine(generatedProjectPath, "buildall.bat"), orderedProjects.Select(t => $"dotnet build {t.ReferencePath.AbsolutePath} -p:\"UnityConfiguration=%1;UnityPlatform=%2;MSBuildExtensionsPath=%~3\" --no-dependencies\nif %ERRORLEVEL% GEQ 1 EXIT /B 1"));
+
                 IEnumerable<string> projectEntries = orderedProjects.Select(t => GetProjectEntry(t, projectEntryTemplateBody));
 
                 string[] twoConfigs = new string[] {
@@ -310,7 +232,7 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
                 };
 
                 IEnumerable<string> configPlatforms = twoConfigs
-                    .SelectMany(t => AvailablePlatforms.Select(p => t.Replace("<Platform>", p.Name.ToString())));
+                    .SelectMany(t => availablePlatforms.Select(p => t.Replace("<Platform>", p.Name.ToString())));
 
                 List<string> configurationMappings = new List<string>();
                 List<string> disabled = new List<string>();
@@ -331,7 +253,7 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
 
                     void ProcessMappings(Guid guid, string configuration, IReadOnlyDictionary<BuildTarget, CompilationPlatformInfo> platforms)
                     {
-                        foreach (CompilationPlatformInfo platform in AvailablePlatforms)
+                        foreach (CompilationPlatformInfo platform in availablePlatforms)
                         {
                             configurationMappings.Add(ConfigurationTemplateReplace(configurationPlatformMappingTemplateBody, guid.ToString(), configuration, platform.Name));
 
@@ -349,9 +271,9 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
                 solutionTemplateText = Utilities.ReplaceTokens(solutionTemplateText, new Dictionary<string, string>()
                 {
                     { projectEntryTemplate, string.Join(Environment.NewLine, projectEntries)},
-                    { configurationPlatformEntry, string.Join(Environment.NewLine, configPlatforms)},
-                    { configurationPlatformMappingTemplate, string.Join(Environment.NewLine, configurationMappings) },
-                    { configurationPlatformEnabledTemplate, string.Join(Environment.NewLine, disabled) }
+                    { configurationPlatformEntry, string.Join(string.Empty, configPlatforms)},
+                    { configurationPlatformMappingTemplate, string.Join(string.Empty, configurationMappings) },
+                    { configurationPlatformEnabledTemplate, string.Join(string.Empty, disabled) }
                 });
             }
             else
@@ -368,3 +290,4 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
         }
     }
 }
+#endif

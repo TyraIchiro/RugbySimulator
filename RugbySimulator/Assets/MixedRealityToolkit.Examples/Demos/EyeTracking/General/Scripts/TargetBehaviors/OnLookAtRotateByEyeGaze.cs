@@ -124,6 +124,10 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos.EyeTracking
         /// <summary>
         /// Clamps angle within the range of a given min and max value and maps it to the range of -180 to +180.
         /// </summary>
+        /// <param name="angle"></param>
+        /// <param name="min"></param>
+        /// <param name="maxAngleInDegree"></param>
+        /// <returns></returns>
         private float ClampAngleInDegree(float angleInDegree, float minAngleInDegree, float maxAngleInDegree)
         {
             // Angle is not constricted

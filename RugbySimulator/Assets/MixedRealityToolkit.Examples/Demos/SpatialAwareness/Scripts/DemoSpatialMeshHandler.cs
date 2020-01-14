@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
 using Microsoft.MixedReality.Toolkit.SpatialAwareness;
+using Microsoft.MixedReality.Toolkit.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +16,20 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos
     /// </summary>
     public class DemoSpatialMeshHandler : MonoBehaviour, SpatialAwarenessHandler
     {
+        private IMixedRealitySpatialAwarenessSystem spatialAwarenessSystem = null;
+
+        private IMixedRealitySpatialAwarenessSystem SpatialAwarenessSystem
+        {
+            get
+            {
+                if (spatialAwarenessSystem == null)
+                {
+                    MixedRealityServiceRegistry.TryGetService<IMixedRealitySpatialAwarenessSystem>(out spatialAwarenessSystem);
+                }
+                return spatialAwarenessSystem;
+            }
+        }
+
         /// <summary>
         /// Collection that tracks the IDs and count of updates for each active spatial awareness mesh.
         /// </summary>
@@ -50,9 +65,9 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos
         /// </summary>
         private void RegisterEventHandlers()
         {
-            if (!isRegistered && (CoreServices.SpatialAwarenessSystem != null))
+            if (!isRegistered && (SpatialAwarenessSystem != null))
             {
-                CoreServices.SpatialAwarenessSystem.RegisterHandler<SpatialAwarenessHandler>(this);
+                SpatialAwarenessSystem.RegisterHandler<SpatialAwarenessHandler>(this);
                 isRegistered = true;
             }
         }
@@ -62,9 +77,9 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos
         /// </summary>
         private void UnregisterEventHandlers()
         {
-            if (isRegistered && (CoreServices.SpatialAwarenessSystem != null))
+            if (isRegistered && (SpatialAwarenessSystem != null))
             {
-                CoreServices.SpatialAwarenessSystem.UnregisterHandler<SpatialAwarenessHandler>(this);
+                SpatialAwarenessSystem.UnregisterHandler<SpatialAwarenessHandler>(this);
                 isRegistered = false;
             }
         }

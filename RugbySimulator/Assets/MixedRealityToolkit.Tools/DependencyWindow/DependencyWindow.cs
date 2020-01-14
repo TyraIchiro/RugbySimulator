@@ -160,7 +160,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
         {
             if (EditorSettings.serializationMode != SerializationMode.ForceText)
             {
-                using (new EditorGUILayout.HorizontalScope())
+                EditorGUILayout.BeginHorizontal();
                 {
                     EditorGUILayout.HelpBox("Dependencies can only be tracked with text assets. Please change the project serialization mode to \"Force Text\"", MessageType.Error);
 
@@ -169,12 +169,13 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
                         EditorSettings.serializationMode = SerializationMode.ForceText;
                     }
                 }
+                EditorGUILayout.EndHorizontal();
             }
         }
 
         private void DrawDependencyGraphStatistics()
         {
-            using (new EditorGUILayout.HorizontalScope())
+            EditorGUILayout.BeginHorizontal();
             {
                 if (dependencyGraph.Count == 0)
                 {
@@ -190,6 +191,8 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
                     RefreshDependencyGraph();
                 }
             }
+            EditorGUILayout.EndHorizontal();
+
             EditorGUILayout.Space();
 
             if (GUI.enabled)
@@ -472,7 +475,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
 
         private static void DrawDependencyGraphNode(DependencyGraphNode node, int depth, int maxDepth)
         {
-            using (new EditorGUILayout.HorizontalScope())
+            EditorGUILayout.BeginHorizontal();
             {
                 GUILayout.Space(depth * 8);
 
@@ -492,6 +495,7 @@ namespace Microsoft.MixedReality.Toolkit.Utilities.Editor
                     EditorGUILayout.LabelField("Max display depth was exceeded...");
                 }
             }
+            EditorGUILayout.EndHorizontal();
         }
 
         private static void DrawDependencyGraphNodeRecurse(DependencyGraphNode node, int depth, int maxDepth)

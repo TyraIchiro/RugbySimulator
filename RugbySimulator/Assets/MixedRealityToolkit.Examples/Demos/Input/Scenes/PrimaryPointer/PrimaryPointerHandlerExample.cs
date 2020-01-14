@@ -23,8 +23,7 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos
             {
                 if (newPointer != null)
                 {
-                    GameObject gameObjectReference = newPointer.BaseCursor?.GameObjectReference;
-                    Transform parentTransform = (gameObjectReference != null) ? gameObjectReference.transform : null;
+                    Transform parentTransform = newPointer.BaseCursor?.GameObjectReference?.transform;
 
                     // If there's no cursor try using the controller pointer transform instead
                     if (parentTransform == null)

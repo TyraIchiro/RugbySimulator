@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License. See LICENSE in the project root for license information.
 
+#if UNITY_EDITOR
 using System;
 using UnityEditor;
 
@@ -42,10 +43,10 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
         }
 
         /// <summary>
-        /// Returns the configured <see cref="TargetFramework"/> for the <see href="https://docs.unity3d.com/ScriptReference/BuildTargetGroup.html">BuildTargetGroup</see>.
+        /// Returns the configured <see cref="TargetFramework"/> for the <see cref="BuildTargetGroup"/>.
         /// </summary>
-        /// <param name="this">The <see href="https://docs.unity3d.com/ScriptReference/BuildTargetGroup.html">BuildTargetGroup</see> to get <see cref="TargetFramework"/> for.</param>
-        /// <returns>The <see cref="TargetFramework"/> configured for given <see href="https://docs.unity3d.com/ScriptReference/BuildTargetGroup.html">BuildTargetGroup</see>.</returns>
+        /// <param name="this">The <see cref="BuildTargetGroup"/> to get <see cref="TargetFramework"/> for.</param>
+        /// <returns>The <see cref="TargetFramework"/> configured for given <see cref="BuildTargetGroup"/>.</returns>
         public static TargetFramework GetTargetFramework(this BuildTargetGroup @this)
         {
             if (@this == BuildTargetGroup.Unknown)
@@ -72,3 +73,4 @@ namespace Microsoft.MixedReality.Toolkit.MSBuild
         }
     }
 }
+#endif

@@ -103,19 +103,18 @@ namespace Microsoft.MixedReality.Toolkit.Editor
             buttonContent.text = " Services Documentation";
             buttonContent.tooltip = servicesDocumentationURL;
 
-            using (new EditorGUILayout.HorizontalScope())
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+
+            if (GUILayout.Button(buttonContent, GUILayout.MaxWidth(docLinkWidth)))
             {
-                GUILayout.FlexibleSpace();
-
-                if (GUILayout.Button(buttonContent, GUILayout.MaxWidth(docLinkWidth)))
-                {
-                    Application.OpenURL(servicesDocumentationURL);
-                }
-
-                GUILayout.FlexibleSpace();
+                Application.OpenURL(servicesDocumentationURL);
             }
 
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
             EditorGUILayout.Space();
+
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Choose a name for your service.", EditorStyles.miniLabel);
 
@@ -222,20 +221,19 @@ namespace Microsoft.MixedReality.Toolkit.Editor
             EditorGUILayout.Space();
 
             GUI.color = enabledColor;
-            using (new EditorGUILayout.HorizontalScope())
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Back"))
             {
-                if (GUILayout.Button("Back"))
-                {
-                    creator.Stage = ExtensionServiceCreator.CreationStage.SelectNameAndPlatform;
-                    creator.StoreState();
-                }
-                GUI.color = readyToProgress ? enabledColor : disabledColor;
-                if (GUILayout.Button("Next") && readyToProgress)
-                {
-                    // Start the async method that will wait for the service to be created
-                    CreateAssetsAsync();
-                }
+                creator.Stage = ExtensionServiceCreator.CreationStage.SelectNameAndPlatform;
+                creator.StoreState();
             }
+            GUI.color = readyToProgress ? enabledColor : disabledColor;
+            if (GUILayout.Button("Next") && readyToProgress)
+            {
+                // Start the async method that will wait for the service to be created
+                CreateAssetsAsync();
+            }
+            EditorGUILayout.EndHorizontal();
         }
 
         private void DrawCreatingAssets()
@@ -318,35 +316,32 @@ namespace Microsoft.MixedReality.Toolkit.Editor
                     EditorGUILayout.HelpBox("Toolkit has no RegisteredServiceProvidersProfile. Can't register service.", MessageType.Warning);
                     canRegisterProfile = false;
                 }
-
                 EditorGUILayout.Space();
-                using (new EditorGUILayout.HorizontalScope())
+                EditorGUILayout.BeginHorizontal();
+                GUI.color = canRegisterProfile ? enabledColor : disabledColor;
+                if (GUILayout.Button("Register") && canRegisterProfile)
                 {
-                    GUI.color = canRegisterProfile ? enabledColor : disabledColor;
-                    if (GUILayout.Button("Register") && canRegisterProfile)
-                    {
-                        RegisterServiceWithActiveMixedRealityProfile();
-                    }
-                    GUI.color = enabledColor;
-                    if (GUILayout.Button("Not Now"))
-                    {
-                        creator.ResetState();
-                        Close();
-                    }
+                    RegisterServiceWithActiveMixedRealityProfile();
                 }
+                GUI.color = enabledColor;
+                if (GUILayout.Button("Not Now"))
+                {
+                    creator.ResetState();
+                    Close();
+                }
+                EditorGUILayout.EndHorizontal();
             }
             else
             {
                 EditorGUILayout.LabelField("Your service is now registered. Scripts can access this service like so:", EditorStyles.miniLabel);
 
-                using (new EditorGUILayout.HorizontalScope())
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.TextField(creator.SampleCode);
+                if (GUILayout.Button("Copy Sample Code", EditorStyles.miniButton))
                 {
-                    EditorGUILayout.TextField(creator.SampleCode);
-                    if (GUILayout.Button("Copy Sample Code", EditorStyles.miniButton))
-                    {
-                        EditorGUIUtility.systemCopyBuffer = creator.SampleCode;
-                    }
+                    EditorGUIUtility.systemCopyBuffer = creator.SampleCode;
                 }
+                EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.Space();
                 if (GUILayout.Button("Close"))

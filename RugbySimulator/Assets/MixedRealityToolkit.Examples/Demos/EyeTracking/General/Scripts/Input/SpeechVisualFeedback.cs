@@ -58,6 +58,7 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos.EyeTracking
         /// <summary>
         /// Update text to be displayed
         /// </summary>
+        /// <param name="msg"></param>
         private void UpdateTextMesh(string msg)
         {
             if (MyTextMesh != null)
@@ -69,6 +70,7 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos.EyeTracking
         /// <summary>
         /// This method handles displaying a given text message.
         /// </summary>
+        /// <param name="msg"></param>
         public void ShowVisualFeedback(string msg)
         {
             // Start showing the visual feedback

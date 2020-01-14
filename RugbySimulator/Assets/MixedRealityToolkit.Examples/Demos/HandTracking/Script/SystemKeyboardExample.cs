@@ -56,26 +56,17 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos
             KeyboardText = wmrKeyboard.Text;
             if (wmrKeyboard.Visible)
             {
-                if (debugMessage != null)
-                {
-                    debugMessage.text = "typing... " + KeyboardText;
-                }
+                debugMessage.text = "typing... " + KeyboardText;
             }
             else
             {
                 if (KeyboardText == null || KeyboardText.Length == 0)
                 {
-                    if (debugMessage != null)
-                    {
-                        debugMessage.text = "open keyboard to type text";
-                    }
+                    debugMessage.text = "open keyboard to type text";
                 }
                 else
                 {
-                    if (debugMessage != null)
-                    {
-                        debugMessage.text = "typed " + KeyboardText;
-                    }
+                    debugMessage.text = "typed " + KeyboardText;
                 }
             }
 #elif UNITY_IOS || UNITY_ANDROID
@@ -89,18 +80,11 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos
                 KeyboardText = touchscreenKeyboard.text;
                 if (TouchScreenKeyboard.visible)
                 {
-                    if (debugMessage != null)
-                    {
-                        debugMessage.text = "typing... " + KeyboardText;
-                    }
+                    debugMessage.text = "typing... " + KeyboardText;
                 }
                 else
                 {
-                    if (debugMessage != null)
-                    {
-                        debugMessage.text = "typed " + KeyboardText;
-                    }
-
+                    debugMessage.text = "typed " + KeyboardText;
                     touchscreenKeyboard = null;
                 }
             }

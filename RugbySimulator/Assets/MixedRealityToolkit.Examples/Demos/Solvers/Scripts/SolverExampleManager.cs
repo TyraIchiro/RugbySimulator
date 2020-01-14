@@ -102,8 +102,14 @@ namespace Microsoft.MixedReality.Toolkit.Examples.Demos
         {
             if (currentSolver != null)
             {
-                Destroy(currentSolver);
+                DestroyImmediate(currentSolver);
                 currentSolver = null;
+            }
+
+            if (handler != null)
+            {
+                DestroyImmediate(handler);
+                handler = null;
             }
         }
     }

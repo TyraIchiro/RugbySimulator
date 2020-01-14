@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/Play_Kick01.unity
+- path: Assets/Scenes/Operate_Object.unity
   isLoaded: 1
   isActive: 1
