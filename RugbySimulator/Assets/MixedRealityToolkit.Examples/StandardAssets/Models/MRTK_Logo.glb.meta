@@ -23,9 +23,8 @@ ScriptedImporter:
     4300002: Shape002Shape
     11400000: glTF data
     100100000: main
-    2186277476908879412: ImportLogs
   externalObjects: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-  script: {instanceID: 0}
+  script: {fileID: 11500000, guid: 75911c45f303c8f45927f5efeaa50cc4, type: 3}
