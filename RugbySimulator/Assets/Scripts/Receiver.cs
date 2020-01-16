@@ -6,6 +6,7 @@ using System;
 /*
 public class Receiver : MonoBehaviour, IMixedRealitySourceStateHandler, IMixedRealityInputHandler
 {
+    TrailRenderer
     IMixedRealityInputSource currentInputSource;
     private uint id;
     private bool isDrag = false;
