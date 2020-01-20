@@ -23,6 +23,9 @@ public class TapPlayerDetector : MonoBehaviour, IMixedRealityPointerHandler
         {
             Debug.Log(this.gameObject);
             Monitoring_Field.isTappingPlayer = this.gameObject;
+            Draw_Mode.obj = Monitoring_Field.isTappingPlayer;
+            Draw_Mode.line = Draw_Mode.obj.GetComponent<TrailRenderer>();
+            Draw_Mode.line.enabled = true;
         }
     }
 

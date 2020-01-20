@@ -7,8 +7,8 @@ using Microsoft.MixedReality.Toolkit.UI;
 public class Draw_Mode : MonoBehaviour, IMixedRealityPointerHandler
 {
     public static bool isalive;
-    GameObject obj;
-    TrailRenderer line;
+    public static GameObject obj;
+    public static TrailRenderer line;
 
     // Start is called before the first frame update
     void Start()
@@ -21,9 +21,11 @@ public class Draw_Mode : MonoBehaviour, IMixedRealityPointerHandler
     {
         if (isalive)
         {
+            /*
             obj = Monitoring_Field.isTappingPlayer;
             line = obj.GetComponent<TrailRenderer>();
             line.enabled = true;
+            */
         }
     }
 
@@ -39,6 +41,8 @@ public class Draw_Mode : MonoBehaviour, IMixedRealityPointerHandler
         else
         {
             isalive = true;
+            obj = GameObject.Find("Ground");
+            line = obj.GetComponent<TrailRenderer>();
         }
     }
 

@@ -1,8 +1,8 @@
 WindowsStoreApps
 PlayerPath?
-C:/Users/XRProject/Documents/Unity/RugbySimulator/Build_
+C:/Users/XRProject/Documents/Unity/RugbySimulator/Build_PC
 SceneListBegin?
-Assets/Scenes/Play_Kick01.unity
+Assets/Scenes/Operate_Object.unity
 SceneListEnd?
 2a96dc89b8a5059865d5c28557c5ab8d Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.Input.ScreenSpaceMousePointer
 c4a2ae8d92316554f46813565a38c329 Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.UI.SpeechConfirmationTooltip
