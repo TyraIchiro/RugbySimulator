@@ -19,8 +19,11 @@ public class TapPlayerDetector : MonoBehaviour, IMixedRealityPointerHandler
 
     public void OnPointerClicked(MixedRealityPointerEventData eventData)
     {
-        Debug.Log(this.gameObject);
-        Monitoring_Field.isTappingPlayer = this.gameObject;
+        if (Monitoring_Field.moni_mode)
+        {
+            Debug.Log(this.gameObject);
+            Monitoring_Field.isTappingPlayer = this.gameObject;
+        }
     }
 
     public void OnPointerDown(MixedRealityPointerEventData eventData)
