@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/Operate_Object.unity
+- path: Assets/Scenes/Play_Cross.unity
   isLoaded: 1
   isActive: 1

@@ -5,14 +5,15 @@ using Microsoft.MixedReality.Toolkit.UI;
 
 public class Field_Alive : MonoBehaviour
 {
-    GameObject field;
+    public GameObject field;
+    public GameObject ground;
+    public GameObject panel;
     ManipulationHandler f_hnd;
-    bool isalive;
+    bool isalive = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        field = GameObject.Find("AllGround");
         f_hnd = field.GetComponent<ManipulationHandler>();
     }
 
@@ -24,13 +25,17 @@ public class Field_Alive : MonoBehaviour
 
     public void Move_Stop()
     {
-        if (f_hnd.enabled == true)
+        if (isalive)
         {
-            f_hnd.enabled = false;
+            panel.transform.parent = ground.transform;
+            f_hnd.enabled = true;
+            isalive = false;
         }
         else
         {
-            f_hnd.enabled = true;
+            panel.transform.parent = null;
+            f_hnd.enabled = false;
+            isalive = true;
         }
     }
 }

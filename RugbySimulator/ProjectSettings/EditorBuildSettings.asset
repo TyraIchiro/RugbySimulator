@@ -11,13 +11,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Demo_AddPlayer.unity
     guid: 21598e6fbb0dbfb4cb2452435d6269e4
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Play_Cross.unity
     guid: 43112139b00f4b841a0d0198ced99624
   - enabled: 0
     path: Assets/Scenes/Play_Kick01.unity
     guid: 2cf0a4b21e6a9ce4fbd8e18bbdd0e8f1
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Operate_Object.unity
     guid: ded001cb63aba4b40b909be524f40cf7
   m_configObjects: {}

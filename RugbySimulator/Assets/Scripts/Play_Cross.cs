@@ -10,6 +10,7 @@ public class Play_Cross : MonoBehaviour
 
     // プレイヤーのアニメーターコンポーネント
     Animator Ally_10Ani, Ally_12Ani, BallAni;
+    TrailRenderer Ally_10Tra, Ally_12Tra;
     // animatorのstate名
     const string MOVE_ANIM_NAME = "move";
     // アニメーションの開始時間
@@ -26,14 +27,49 @@ public class Play_Cross : MonoBehaviour
         Ally_10Ani = Ally_10.GetComponent<Animator>();
         Ally_12Ani = Ally_12.GetComponent<Animator>();
         BallAni = Ball.GetComponent<Animator>();
+        Ally_10Tra = Ally_10.GetComponent<TrailRenderer>();
+        Ally_12Tra = Ally_12.GetComponent<TrailRenderer>();
         Ally_10Ani.enabled = false;
         Ally_12Ani.enabled = false;
         BallAni.enabled = false;
+        Ally_10Tra.enabled = false;
+        Ally_12Tra.enabled = false;
         Ally_10_startPos = Ally_10.transform.localPosition;
         Ally_12_startPos = Ally_12.transform.localPosition;
         Ball_startPos = Ball.transform.localPosition;
     }
 
+    public void Play()
+    {
+        if (Ally_10Ani.enabled == false && Ally_12Ani.enabled == false && BallAni.enabled == false)
+        {
+            Ally_10Ani.enabled = true;
+            //Ally_10Ani.Play(MOVE_ANIM_NAME, 0, StartTime);
+            Ally_12Ani.enabled = true;
+            //Ally_12Ani.Play(MOVE_ANIM_NAME, 0, StartTime);
+            BallAni.enabled = true;
+            //BallAni.Play(MOVE_ANIM_NAME, 0, StartTime);
+            Ally_10Tra.enabled = true;
+            Ally_12Tra.enabled = true;
+        }
+    }
+
+    public void Stop()
+    {
+        if (Ally_10Ani.enabled && Ally_12Ani.enabled && BallAni.enabled)
+        {
+            Ally_10Ani.enabled = false;
+            StartTime = Ally_10Ani.GetCurrentAnimatorStateInfo(0).normalizedTime;
+            Ally_12Ani.enabled = false;
+            StartTime = Ally_12Ani.GetCurrentAnimatorStateInfo(0).normalizedTime;
+            BallAni.enabled = false;
+            StartTime = BallAni.GetCurrentAnimatorStateInfo(0).normalizedTime;
+            Ally_10Tra.enabled = false;
+            Ally_12Tra.enabled = false;
+        }
+    }
+
+    /*
     public void Play_Stop()
     {
         if (Ally_10Ani.enabled && Ally_12Ani.enabled && BallAni.enabled)
@@ -44,6 +80,8 @@ public class Play_Cross : MonoBehaviour
             StartTime = Ally_12Ani.GetCurrentAnimatorStateInfo(0).normalizedTime;
             BallAni.enabled = false;
             StartTime = BallAni.GetCurrentAnimatorStateInfo(0).normalizedTime;
+            Ally_10Tra.enabled = false;
+            Ally_12Tra.enabled = false;
         } else
         {
             Ally_10Ani.enabled = true;
@@ -52,6 +90,9 @@ public class Play_Cross : MonoBehaviour
             //Ally_12Ani.Play(MOVE_ANIM_NAME, 0, StartTime);
             BallAni.enabled = true;
             //BallAni.Play(MOVE_ANIM_NAME, 0, StartTime);
+            Ally_10Tra.enabled = true;
+            Ally_12Tra.enabled = true;
         }
     }
+    */
 }
