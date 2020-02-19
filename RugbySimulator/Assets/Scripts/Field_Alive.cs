@@ -6,8 +6,6 @@ using Microsoft.MixedReality.Toolkit.UI;
 public class Field_Alive : MonoBehaviour
 {
     public GameObject field;
-    public GameObject ground;
-    public GameObject panel;
     ManipulationHandler f_hnd;
     bool isalive = false;
 
@@ -27,13 +25,11 @@ public class Field_Alive : MonoBehaviour
     {
         if (isalive)
         {
-            panel.transform.parent = ground.transform;
             f_hnd.enabled = true;
             isalive = false;
         }
         else
         {
-            panel.transform.parent = null;
             f_hnd.enabled = false;
             isalive = true;
         }

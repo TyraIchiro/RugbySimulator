@@ -1,8 +1,8 @@
 WindowsStoreApps
 PlayerPath?
-C:/Users/XRProject/Documents/Unity/RugbySimulator/Build_0128
+C:/Users/XRProject/Documents/Unity/RugbySimulator/Build_Test
 SceneListBegin?
-Assets/Scenes/Play_Cross.unity
+Assets/Scenes/PlayerEye.unity
 SceneListEnd?
 2a96dc89b8a5059865d5c28557c5ab8d Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.Input.ScreenSpaceMousePointer
 c4a2ae8d92316554f46813565a38c329 Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.UI.SpeechConfirmationTooltip
@@ -37,7 +37,7 @@ e1bbf0ab858085e38fae6b12ebbdcd35 UnityEngine.Timeline.dll:UnityEngine.Timeline.P
 38fa77358a0da36947ca0a335e2f19a3 Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.UI.PressableButton
 b617b4affe72256ddf15bb40984499db Microsoft.MixedReality.Toolkit.dll:Microsoft.MixedReality.Toolkit.Utilities.BezierInertia
 92b4aad49b438d7293cccbea33d7bf14 Microsoft.MixedReality.Toolkit.dll:Microsoft.MixedReality.Toolkit.Input.MixedRealityMouseInputProfile
-0d80a33b2fdf5d2a866e83e5457b4dd9 Assembly-CSharp.dll:.Field_Alive
+ca5a47780d5c90ce0537e9b692ca84b6 Assembly-CSharp.dll:.Field_Alive
 aa953b3abe334069255bdc8042e80746 Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.Utilities.Solvers.HandConstraint
 d5f7a5e3ef20ae8015721468ecb87717 Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.UI.InteractableReceiver
 e7a73f5f78ba6445195ec23b74a1ce2d Unity.TextMeshPro.dll:TMPro.TMP_ScrollbarEventHandler
@@ -48,17 +48,14 @@ d3aaebf330b2bdf710324a0cf060663e Microsoft.MixedReality.Toolkit.SDK.dll:Microsof
 271cac78a1da90a16359b06a27928ecd Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.EyeTracking.TriggerOnStartup
 71bb6a6b6c8f052f948db64c7dd3ca4f Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.EyeTracking.DoNotRender
 83e769eee07fc231384c812eedbb8224 Assembly-CSharp.dll:.Get_Player
-8717b1fb37a68f8f806cf0bbe9cd6507 Assembly-CSharp.dll:Es.InkPainter.Sample.ClipPainter
 f4b64ef775709caff315b823f33a3cf9 Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.Input.BaseCursor
 e1e7d88bd8f0defceafa24c0322c346f Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.EyeTracking.HitBehaviorDestroyOnSelect
 663fcc0652ae006595a04f60e05cae23 Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.HandInteractionTouch
 8fd7a90aa5f3379706dfda53b2d2ab0c Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.Input.ControllerPoseSynchronizer
-d9916d59990d9ee8d98cc27b65e86898 Assembly-CSharp.dll:Es.InkPainter.Sample.CollisionPainter
 71bb6a6b6c8f052f948db64c7dd3ca4f Assembly-CSharp.dll:TMPro.TMP_PhoneNumberValidator
 e779c980c14c2899fb0e40e342de293e Microsoft.MixedReality.Toolkit.dll:Microsoft.MixedReality.Toolkit.Utilities.MeshLineRenderer
 b61ead5fc16168afa35441e37c23a6b0 Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.UI.Interactable
 836a380c9f50b9c318fe58d18bc1320f Microsoft.MixedReality.Toolkit.dll:Microsoft.MixedReality.Toolkit.Utilities.MixedRealityLineRenderer
-73588b7b7f45f9ccb7f27a80974fa602 Assembly-CSharp.dll:Es.InkPainter.Sample.TextureRecovery
 71bb6a6b6c8f052f948db64c7dd3ca4f Microsoft.MixedReality.Toolkit.Services.InputSystem.dll:Microsoft.MixedReality.Toolkit.Input.InputSystemGlobalListener
 5905a68595be1441f5fbbfef02d20611 Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.UI.ButtonBackgroundSizeOffset
 cf9f5cf2c3145a37ac07f00e50e460f9 UnityEngine.UI.dll:UnityEngine.UI.AspectRatioFitter
@@ -149,7 +146,6 @@ ea99bb54775bfa13d403a31e0c43392e Microsoft.MixedReality.Toolkit.SDK.dll:Microsof
 8fd7a90aa5f3379706dfda53b2d2ab0c Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.Input.WindowsMixedRealityControllerVisualizer
 a56f05874465f0293fceef368863188f Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.Experimental.Boundary.BoundarySystemManager
 f96213ec14689f9029936602c1fdca78 Microsoft.MixedReality.Toolkit.dll:Microsoft.MixedReality.Toolkit.Input.MixedRealityControllerVisualizationProfile
-8be5a58aa651153197d52d97ad38ed13 Assembly-CSharp.dll:.TestGL1
 c993e6b39d9667c29d35c5fdd98c6e4a Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.DebugTextOutput
 71bb6a6b6c8f052f948db64c7dd3ca4f UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationPlayableAsset
 06f0fef534ca4c1d6064fd77a26bf722 UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationTrack
@@ -184,7 +180,6 @@ ad9173d3a69d99153f38ed4b62226129 UnityEngine.Networking.dll:UnityEngine.Networki
 71bb6a6b6c8f052f948db64c7dd3ca4f Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.UI.CursorContextManipulationHandler
 bdc72480e1a1977ac48bf87475165df0 Microsoft.MixedReality.Toolkit.dll:Microsoft.MixedReality.Toolkit.Physics.DistorterGravity
 97ab8e8737b5efe2ac53cbb0a014a1a0 Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.EyeTracking.SpeechVisualFeedback
-ddf66a3fc314d738963e9794d7126968 Assembly-CSharp.dll:.Paint
 71bb6a6b6c8f052f948db64c7dd3ca4f Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.LaunchUri
 71bb6a6b6c8f052f948db64c7dd3ca4f Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.Experimental.UI.MixedRealityKeyboard
 072165f6a6a3ec673cef82c2ab9cc760 Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.StandardShader.MaterialMatrix
@@ -202,7 +197,6 @@ c993e6b39d9667c29d35c5fdd98c6e4a Microsoft.MixedReality.Toolkit.Examples.dll:Mic
 6620396f1dcd7e4ff269652ac65d1e20 Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.Input.GGVPointer
 4d16cfbaa8e821a2b370e80844a0e9bc Assembly-CSharp.dll:TMPro.Examples.Benchmark03
 17747a1accac7bc77ca409389d61854b Microsoft.MixedReality.Toolkit.Services.InputAnimation.dll:Microsoft.MixedReality.Toolkit.Input.MixedRealityInputRecordingProfile
-5f8f91d1566f27582e097719e48af4ab Assembly-CSharp.dll:Es.InkPainter.InkCanvas
 3af41913546024595636e16206dce8d3 Microsoft.MixedReality.Toolkit.dll:Microsoft.MixedReality.Toolkit.Utilities.ParabolaPhysicalLineDataProvider
 61dc83cb81d5c8355bf4b818833349be Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.Utilities.Solvers.Orbital
 1d7cb9012debc264191fe747cb3d0cb6 Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.UI.ToolTipBackgroundBlob
@@ -214,7 +208,6 @@ e6f0efd0e20669d577e9d21526b3d3f9 Assembly-CSharp.dll:TMPro.Examples.WarpTextExam
 f7c0cbbdab7fca0259821290172ecf58 Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.UI.HandInteractionPanZoom
 dbd36681d2000ab7e2e6bcc3f5f19eab Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.EyeTracking.PanZoomRectTransf
 e570052b21f077fcf1509590022416b4 Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.UI.ButtonBackgroundSize
-d2fe2dce77cdcb13edc4b019b313b2f0 Assembly-CSharp.dll:Es.Utility.SceneViewCamera
 dd7520b7d4e690e8c593273e7b9fbe80 Assembly-CSharp.dll:TMPro.Examples.TMP_TextEventCheck
 4cf2bbd18b7febef821e776bff72b4dc Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.EyeTracking.TargetMoveToCamera
 76eb44ba733054fa1ebc85ccc64177ea Microsoft.MixedReality.Toolkit.dll:Microsoft.MixedReality.Toolkit.Utilities.MeshOutlineHierarchy
@@ -227,7 +220,6 @@ dd7520b7d4e690e8c593273e7b9fbe80 Assembly-CSharp.dll:TMPro.Examples.TMP_TextEven
 5a95be88cf8c36fe0dab0e0344fa19d1 Microsoft.MixedReality.Toolkit.dll:Microsoft.MixedReality.Toolkit.Utilities.ParabolaConstrainedLineDataProvider
 8efb04991d15e76dfaa810eab69d427b Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.Input.PointerClickHandler
 af3d057d8910754f614083343f2c59e1 Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.EyeTracking.PanZoomBaseTexture
-a387467b001eedd3ba4ceab3628e2fa6 Assembly-CSharp.dll:Es.InkPainter.Sample.CollisionReflectionPainter
 c07d35ec60d644a4b26923b4dcfd53e3 Microsoft.MixedReality.Toolkit.dll:Microsoft.MixedReality.Toolkit.Physics.DistorterSimplex
 71bb6a6b6c8f052f948db64c7dd3ca4f Unity.XR.WindowsMR.dll:UnityEngine.EventSystems.HoloLensInput
 1be2719b9c6829caef49890a01ee90df Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.TetheredPlacement
@@ -243,7 +235,7 @@ bfb3f783bb9aa150b33978ecebb6e1ab Microsoft.MixedReality.Toolkit.SDK.dll:Microsof
 52a7dde3b4962b24ec1f67c7509be264 Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.EyeTracking.MoveWithCamera
 3e6ee621860cf1c84720d4f1686c3b2c Microsoft.MixedReality.Toolkit.dll:Microsoft.MixedReality.Toolkit.Physics.DistorterWiggly
 14e01c95e69a332f3e44bbea1b868a71 Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.BoundaryVisualizationDemo
-4a244b92de33bdd9ec3c6b0937064d50 Assembly-CSharp.dll:.Play_Cross
+dfd773cbc4bdd9ca2fc637bf4e1a6c37 Assembly-CSharp.dll:.Play_Cross
 09f3f39b43aa41ac6f7c68315d1d86fc Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.Utilities.Solvers.Overlap
 ac40c7977181e0eec0fdd31d45dd4394 Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.Rotator
 74f34bb73dcd7b8d187ddde8d5073892 Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.UI.States
@@ -266,7 +258,6 @@ daba20037994367245375906a905a4f8 Microsoft.MixedReality.Toolkit.Examples.dll:Mic
 609223cbb73cdb4f7abbf5ebffbc0d1d Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.ChangeManipulation
 975c3c81503728d2cdac2ca2309213d9 Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.EyeTracking.GrabReleaseDetector
 8fd7a90aa5f3379706dfda53b2d2ab0c Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.Input.MixedRealityControllerVisualizer
-65610eb91e69f824f664a9a62677ef8e Assembly-CSharp.dll:Es.InkPainter.Sample.ReflectPainter
 3375c3d749f8f4cad889721b431bdc27 Assembly-CSharp.dll:TMPro.Examples.CameraController
 ad3f9f8452334bb3ba24cc8186bf392d Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.ToggleBoundingBox
 1988db9d21bf606401e3a65d780843bb Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Experimental.Dwell.DwellProfileWithDecay
@@ -297,7 +288,6 @@ d5669e7ffa968f632185171f8a5f8853 Microsoft.MixedReality.Toolkit.Examples.dll:Mic
 dbbf5352f4e59261f7d78214a3ec3ddb Microsoft.MixedReality.Toolkit.dll:Microsoft.MixedReality.Toolkit.MixedRealityToolkit
 49de0af73932dadf622ee01034d9ad0e Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.EyeTracking.Logging.UserInputRecorderUIController
 f71ebb600195fc123ce17c685359f45b Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.UI.ProgressIndicatorObjectDisplay
-ded2bd5839219eceaa979a5ef5657183 Assembly-CSharp.dll:Es.InkPainter.Effective.HeightFluid
 bd462d0f5ffe5a17d9e2bc371b84cac3 Microsoft.MixedReality.Toolkit.Demos.Gltf.dll:Microsoft.MixedReality.Toolkit.Examples.Demos.Gltf.TestGlbLoading
 7b3cc26f3eaa9f8285f9e9e8e30dcf32 Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.Utilities.Solvers.SurfaceMagnetism
 7916452f9ef9579fda1c2deeb7927800 Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.GrabTouchExample
@@ -419,7 +409,6 @@ afd5fa44501156c3f96963500112a836 Microsoft.MixedReality.Toolkit.SDK.dll:Microsof
 8135104394521793e21a9cefd8d44a1c Microsoft.MixedReality.Toolkit.dll:Microsoft.MixedReality.Toolkit.Input.MixedRealityInputActionRulesProfile
 c03819a53c1609aec5276e3f3bd7c621 Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.UI.InteractablePointerSimulator
 27e5341178f188b89bdc6495710b590c Assembly-CSharp.dll:TMPro.Examples.Benchmark01_UGUI
-c2946c321e847f4b35693087ec8771a0 Assembly-CSharp.dll:Es.InkPainter.Sample.MousePainter
 12039e9598d3caa4b569278724bd9666 Microsoft.MixedReality.Toolkit.Examples.dll:Microsoft.MixedReality.Toolkit.Examples.RotateWithPan
 90e0b785ffc0877db927ca6a7a8e58bb Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.Experimental.Dwell.DwellProfile
 e3a30d931f73875604d9f757ab2f84de Microsoft.MixedReality.Toolkit.SDK.dll:Microsoft.MixedReality.Toolkit.Input.InteractiveMeshCursor

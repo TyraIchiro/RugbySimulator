@@ -46,14 +46,21 @@ MonoBehaviour:
       axisConstraint: 0
   - localizationKey: 
     keyword: Go
-    keyCode: 122
+    keyCode: 114
     action:
       id: 0
       description: Toggle Profiler
       axisConstraint: 0
   - localizationKey: 
     keyword: Stop
-    keyCode: 120
+    keyCode: 102
+    action:
+      id: 0
+      description: Toggle Profiler
+      axisConstraint: 0
+  - localizationKey: 
+    keyword: Field
+    keyCode: 118
     action:
       id: 0
       description: Toggle Profiler
