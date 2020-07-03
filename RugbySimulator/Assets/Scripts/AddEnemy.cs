@@ -46,7 +46,7 @@ public class AddEnemy : MonoBehaviour
         {
             Debug.Log("Full Enemy");
         }
-        Enemy[j].SetActive(true);
+        // Enemy[j].SetActive(true);
         j++;
     }
 }
