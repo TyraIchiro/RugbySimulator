@@ -41,19 +41,21 @@ public class SetEnemyMember : MonoBehaviour
 
     }
 
-    public int j = 0;
+    public int E = 0;
     public void OnClickTapEvent()
     {
         Text Menber_text = Menber.GetComponent<Text>();
-        if (j > 14)
+        if (E > 14)
         {
             Debug.Log("Full Enemy");
             Menber_text.text = "Full Enemy";
-        } else {
+        }
+        else
+        {
             // Enemy[j].SetActive(true);
-            j++;
-            Menber_text.text = "Enemy:" + j;
-            Debug.Log("Enemy:" + j);
+            E++;
+            Menber_text.text = "Enemy:" + E;
+            Debug.Log("Enemy:" + E);
         }
     }
 }

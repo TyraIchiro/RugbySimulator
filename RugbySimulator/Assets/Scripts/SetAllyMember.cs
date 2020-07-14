@@ -41,19 +41,21 @@ public class SetAllyMember : MonoBehaviour
 
     }
 
-    public int j = 0;
+    public int A = 0;
     public void OnClickTapEvent()
     {
         Text Menber_text = Menber.GetComponent<Text>();
-        if (j > 14)
+        if (A > 14)
         {
             Debug.Log("Full Ally");
             Menber_text.text = "Full Ally";
-        } else {
+        }
+        else
+        {
             // Ally[j].SetActive(true);
-            j++;
-            Menber_text.text = "Ally:" + j;
-            Debug.Log("Ally:" + j);
+            A++;
+            Menber_text.text = "Ally:" + A;
+            Debug.Log("Ally:" + A);
         }
     }
 }
