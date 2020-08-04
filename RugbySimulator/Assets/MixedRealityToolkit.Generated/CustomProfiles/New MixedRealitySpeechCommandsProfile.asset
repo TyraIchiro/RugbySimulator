@@ -65,3 +65,17 @@ MonoBehaviour:
       id: 0
       description: Toggle Profiler
       axisConstraint: 0
+  - localizationKey: 
+    keyword: Bird
+    keyCode: 98
+    action:
+      id: 0
+      description: Toggle Profiler
+      axisConstraint: 0
+  - localizationKey: 
+    keyword: Slow
+    keyCode: 110
+    action:
+      id: 0
+      description: Toggle Profiler
+      axisConstraint: 0

@@ -83,6 +83,26 @@ public class Play_Cross : MonoBehaviour
         }
     }
 
+    public void Slow()
+    {
+        if (Ally_10Ani.speed == 1.0f)
+        {
+            Ally_10Ani.speed = 0.1f;
+            Ally_12Ani.speed = 0.1f;
+            Enemy_10Ani.speed = 0.1f;
+            Enemy_12Ani.speed = 0.1f;
+            BallAni.speed = 0.1f;
+        }
+        else
+        {
+            Ally_10Ani.speed = 1.0f;
+            Ally_12Ani.speed = 1.0f;
+            Enemy_10Ani.speed = 1.0f;
+            Enemy_12Ani.speed = 1.0f;
+            BallAni.speed = 1.0f;
+        }
+    }
+
     /*
     public void Play_Stop()
     {

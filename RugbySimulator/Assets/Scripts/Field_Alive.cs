@@ -7,12 +7,17 @@ public class Field_Alive : MonoBehaviour
 {
     public GameObject field;
     ManipulationHandler f_hnd;
-    bool isalive = false;
+    bool isalive_f = false;
+    bool isalive_b = true;
+    public Camera bird;
+    public float baseWidth = 1.0f;
+    public float baseHeight = 2.0f;
 
     // Start is called before the first frame update
     void Start()
     {
         f_hnd = field.GetComponent<ManipulationHandler>();
+        bird.enabled = false;
     }
 
     // Update is called once per frame
@@ -23,15 +28,29 @@ public class Field_Alive : MonoBehaviour
 
     public void Move_Stop()
     {
-        if (isalive)
+        if (isalive_f)
         {
             f_hnd.enabled = true;
-            isalive = false;
+            isalive_f = false;
         }
         else
         {
             f_hnd.enabled = false;
-            isalive = true;
+            isalive_f = true;
+        }
+    }
+
+    public void Bird()
+    {
+        if (isalive_b)
+        {
+            bird.enabled = true;
+            isalive_b = false;
+        }
+        else
+        {
+            bird.enabled = false;
+            isalive_b = true;
         }
     }
 }
