@@ -15,7 +15,7 @@ public class SelectSituation : MonoBehaviour
     {
         Situation = Dec_box.GetComponent<SetSituation>();
         Anime = Load.GetComponent<SelectAnimation>();
-        situ = new int[3] {Situation.A, Situation.E, Situation.S};
+        // situ = new int[3] {Situation.A, Situation.E, Situation.S};
         Anime.sel_ani(situ);
     }
 
